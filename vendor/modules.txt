@@ -1,0 +1,2 @@
+# github.com/axamon/hashstring v1.1.0
+github.com/axamon/hashstring
