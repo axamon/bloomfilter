@@ -19,7 +19,7 @@ type BloomFilter struct {
 func New() *BloomFilter {
 
 	var filter = new(BloomFilter)
-	filter.Slice = uint(1000000)
+	//filter.Slice = uint(1000000)
 
 	return filter
 }
@@ -29,8 +29,7 @@ func HashToInt(s string) int {
 
 	f := New()
 
-	
-	h := hashstring.Md5Sum(s)
+	h := hashstring.Sha256Sum(s)
 
 	ss := fmt.Sprintf("%x\n", h)
 
@@ -39,14 +38,15 @@ func HashToInt(s string) int {
 		k = k + int(v)
 	}
 
+	k = k % 64
+
 	//n, _ := strconv.Atoi(k)
 
 	f.Slice |= (1 << uint(k))
 
-	fmt.Println(n, f.Slice)
+	//fmt.Println(f.Slice)
 
-
-	fmt.Println()
+	//fmt.Println()
 	// fmt.Println(h, n)
 	//fmt.Println(l, int(v), k)
 
@@ -62,7 +62,7 @@ func HashToInt(s string) int {
 		}
 		//value |= (1 << uint(30))
 	}
-
+	fmt.Println()
 	return 0
 }
 

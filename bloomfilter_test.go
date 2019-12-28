@@ -7,8 +7,6 @@ import (
 func ExampleHashToInt() {
 
 	bloomfilter.HashToInt("pippo4$wrwew")
-	bloomfilter.HashToInt("pippo$wrwew")
-
 	// Output:
-	//
+	// 0000000000000000000010000000000000000000000000000000000000000000
 }
