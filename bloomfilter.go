@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package bloomfilter is based on only one haghing funcion
+// Package bloomfilter is based on only one hashing funcion
 // and with only 64 bits of memory.
-// That is enough to speed up searches for up to 10 elemnts max.
+// That is enough to speed up searches for up to 10 elements max.
 package bloomfilter
 
 import (
