@@ -1,12 +1,32 @@
 package bloomfilter_test
 
 import (
+	"fmt"
+
 	"github.com/axamon/bloomfilter"
 )
 
-func ExampleHashToInt() {
+func ExampleBloomFilter_Add() {
 
-	bloomfilter.HashToInt("pippo4$wrwew")
+	f := bloomfilter.New()
+
+	f.Add("pippo4$wrwew")
 	// Output:
-	// 0000000000000000000010000000000000000000000000000000000000000000
+	//
+}
+
+func ExampleBloomFilter_NotExist() {
+
+	s := "pippo"
+
+	f := bloomfilter.New()
+
+	f.Add(s)
+
+	fmt.Println(f.NotExist(s))
+	fmt.Println(f.NotExist("pluto676gg7"))
+
+	// Output:
+	// false
+	// true
 }

@@ -2,7 +2,6 @@ package bloomfilter
 
 import (
 	"fmt"
-	"math/bits"
 	//"strconv"
 	"sync"
 
@@ -15,20 +14,13 @@ type BloomFilter struct {
 	sync.Mutex
 }
 
-// New ...
+// New creates a new *BloomFilter istance.
 func New() *BloomFilter {
 
-	var filter = new(BloomFilter)
-	//filter.Slice = uint(1000000)
-
-	return filter
+	return new(BloomFilter)
 }
 
-// HashToInt ...
-func HashToInt(s string) int {
-
-	f := New()
-
+func bittoflip(s string) int {
 	h := hashstring.Sha256Sum(s)
 
 	ss := fmt.Sprintf("%x\n", h)
@@ -38,44 +30,48 @@ func HashToInt(s string) int {
 		k = k + int(v)
 	}
 
-	k = k % 64
+	// make sure bit to flip is in the 64 bit range.
+	pos := (k % 64)
 
-	//n, _ := strconv.Atoi(k)
-
-	f.Slice |= (1 << uint(k))
-
-	//fmt.Println(f.Slice)
-
-	//fmt.Println()
-	// fmt.Println(h, n)
-	//fmt.Println(l, int(v), k)
-
-	// value := uint(1000000)
-	// // Loop over all bits in the uint.
-	for i := 0; i < bits.UintSize; i++ {
-		// If there is a bit set at this position, write a 1.
-		// ... Otherwise write a 0.
-		if f.Slice&(1<<uint(i)) != 0 {
-			fmt.Print("1")
-		} else {
-			fmt.Print("0")
-		}
-		//value |= (1 << uint(30))
-	}
-	fmt.Println()
-	return 0
+	return pos
 }
 
-// CountOneBits ...
-func CountOneBits(i uint) int {
-	return bits.OnesCount(i)
-}
+// Add adds an element to a *BloomFilter.
+func (f *BloomFilter) Add(s string) {
 
-// SetBit ...
-func (f *BloomFilter) SetBit(nbit int) {
+	position := bittoflip(s)
+
+	// performes OR on the position bit.
 	f.Lock()
-	defer f.Unlock()
+	f.Slice |= (1 << uint(position))
+	f.Unlock()
 
 	return
-
 }
+
+// NotExist ...
+func (f *BloomFilter) NotExist(s string) bool {
+
+	position := bittoflip(s)
+
+	fmt.Println(f.Slice)
+	if f.Slice&(1<<uint(position)) == 1 {
+		return true
+	}
+
+	return false
+}
+
+// // CountOneBits ...
+// func CountOneBits(i uint) int {
+// 	return bits.OnesCount(i)
+// }
+
+// // SetBit ...
+// func (f *BloomFilter) SetBit(nbit int) {
+// 	f.Lock()
+// 	defer f.Unlock()
+
+// 	return
+
+// }
