@@ -1,3 +1,10 @@
+// Copyright 2019 Alberto Bregliano. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Package bloomfilter is based on only one haghing funcion
+// and with only 64 bits of memory.
+// That is enough to speed up searches for up to 10 elemnts max.
 package bloomfilter
 
 import (
@@ -78,13 +85,13 @@ func (f *BloomFilter) ShowPosBit(pos int) {
 	fmt.Println()
 }
 
-// NotExist ...
-func (f *BloomFilter) NotExist(s string) bool {
+// Exist ...
+func (f *BloomFilter) Exist(s string) bool {
 
-	position := Bittoflip(s)
+	pos := Bittoflip(s)
 
-	f.ShowBits()
-	if f.Slice&(1<<uint(position)) == 1 {
+	//f.ShowBits()
+	if f.Slice&(1<<uint(pos)) != 0 {
 		return true
 	}
 

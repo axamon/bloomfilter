@@ -1,3 +1,7 @@
+// Copyright 2019 Alberto Bregliano. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package bloomfilter_test
 
 import (
@@ -10,9 +14,13 @@ func ExampleBloomFilter_Add() {
 
 	f := bloomfilter.New()
 
-	f.Add("pippo4$wrwew")
+	fmt.Println(f.Exist("pluto"))
+
+	f.Add("pluto")
+	fmt.Println(f.Exist("pluto"))
 	// Output:
-	//
+	// false
+	// true
 }
 
 func ExampleBittoflip() {
@@ -24,7 +32,7 @@ func ExampleBittoflip() {
 	// 14
 }
 
-func ExampleBloomFilter_NotExist() {
+func ExampleBloomFilter_Exist() {
 
 	s := "pippo"
 
@@ -32,10 +40,14 @@ func ExampleBloomFilter_NotExist() {
 
 	f.Add(s)
 
-	fmt.Println(f.NotExist(s))
-	fmt.Println(f.NotExist("pluto676gg7"))
+	fmt.Println(f.Exist(s))
+	fmt.Println(f.Exist("pluto"))
+
+	f.Add("pluto")
+	fmt.Println(f.Exist("pluto"))
 
 	// Output:
+	// true
 	// false
 	// true
 }
@@ -65,11 +77,16 @@ func ExampleBloomFilter_ShowPosBit() {
 	f.ShowBits()
 
 	f.Add("pippo")
+	f.ShowBits()
 
 	n := bloomfilter.Bittoflip("pippo")
 
 	fmt.Println(n)
 
 	f.ShowPosBit(n)
-
+	// Output:
+	// 0000000000000000000000000000000000000000000000000000000000000000
+	// 0000000000000000000000000000000010000000000000000000000000000000
+	// 32
+	// 1
 }
