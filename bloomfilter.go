@@ -2,7 +2,7 @@ package bloomfilter
 
 import (
 	"fmt"
-	//"strconv"
+	"math/bits"
 	"sync"
 
 	"github.com/axamon/hashstring"
@@ -20,7 +20,8 @@ func New() *BloomFilter {
 	return new(BloomFilter)
 }
 
-func bittoflip(s string) int {
+// Bittoflip finds the bit in a uint to flip as hashing.
+func Bittoflip(s string) int {
 	h := hashstring.Sha256Sum(s)
 
 	ss := fmt.Sprintf("%x\n", h)
@@ -39,7 +40,7 @@ func bittoflip(s string) int {
 // Add adds an element to a *BloomFilter.
 func (f *BloomFilter) Add(s string) {
 
-	position := bittoflip(s)
+	position := Bittoflip(s)
 
 	// performes OR on the position bit.
 	f.Lock()
@@ -49,29 +50,43 @@ func (f *BloomFilter) Add(s string) {
 	return
 }
 
+// ShowBits shows the single bits in the uint.
+func (f *BloomFilter) ShowBits() {
+
+	for i := 0; i < bits.UintSize; i++ {
+		// If there is a bit set at this position, write a 1.
+		// ... Otherwise write a 0.
+		if f.Slice&(1<<uint(i)) != 0 {
+			fmt.Print("1")
+		} else {
+			fmt.Print("0")
+		}
+	}
+	fmt.Println()
+}
+
+// ShowPosBit shows the pos bit in the uint to verify.
+func (f *BloomFilter) ShowPosBit(pos int) {
+
+	// If there is a bit set at this position, write a 1.
+	// ... Otherwise write a 0.
+	if f.Slice&(1<<uint(pos)) != 0 {
+		fmt.Print("1")
+	} else {
+		fmt.Print("0")
+	}
+	fmt.Println()
+}
+
 // NotExist ...
 func (f *BloomFilter) NotExist(s string) bool {
 
-	position := bittoflip(s)
+	position := Bittoflip(s)
 
-	fmt.Println(f.Slice)
+	f.ShowBits()
 	if f.Slice&(1<<uint(position)) == 1 {
 		return true
 	}
 
 	return false
 }
-
-// // CountOneBits ...
-// func CountOneBits(i uint) int {
-// 	return bits.OnesCount(i)
-// }
-
-// // SetBit ...
-// func (f *BloomFilter) SetBit(nbit int) {
-// 	f.Lock()
-// 	defer f.Unlock()
-
-// 	return
-
-// }
