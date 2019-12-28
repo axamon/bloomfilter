@@ -3,7 +3,7 @@ package bloomfilter
 import (
 	"fmt"
 	"math/bits"
-	"strconv"
+	//"strconv"
 	"sync"
 
 	"github.com/axamon/hashstring"
@@ -30,20 +30,20 @@ func HashToInt(s string) int {
 	f := New()
 
 	
-	h := hashstring.Sha256Sum(s)
+	h := hashstring.Md5Sum(s)
 
 	ss := fmt.Sprintf("%x\n", h)
 
-	// var k int
-	// for _, v := range ss {
-	// 	k = k + int(v)
-	// }
+	var k int
+	for _, v := range ss {
+		k = k + int(v)
+	}
 
-	n, _ := strconv.Atoi(ss)
+	//n, _ := strconv.Atoi(k)
 
-	f.Slice |= (1 << uint(n))
+	f.Slice |= (1 << uint(k))
 
-	fmt.Println(f.Slice)
+	fmt.Println(n, f.Slice)
 
 
 	fmt.Println()
