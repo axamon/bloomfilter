@@ -14,10 +14,10 @@ func ExampleBloomFilter_Add() {
 
 	f := bloomfilter.New()
 
-	fmt.Println(f.Exist("pluto"))
+	fmt.Println(f.Exists("pluto"))
 
 	f.Add("pluto")
-	fmt.Println(f.Exist("pluto"))
+	fmt.Println(f.Exists("pluto"))
 	// Output:
 	// false
 	// true
@@ -89,4 +89,23 @@ func ExampleBloomFilter_ShowPosBit() {
 	// 0000000000000000000000000000000010000000000000000000000000000000
 	// 32
 	// 1
+}
+
+func ExampleBloomFilter_Exists() {
+
+	f := bloomfilter.New()
+
+	go f.Add("paperina")
+	f.Add("pluto")
+	f.Add("pippo")
+
+	fmt.Println(f.Exists("pippo"))
+	fmt.Println(f.Exists("pluto"))
+	fmt.Println(f.Exists("minnie"))
+	fmt.Println(f.Exists("paperino"))
+	// Output:
+	// true
+	// true
+	// false
+	// false
 }
